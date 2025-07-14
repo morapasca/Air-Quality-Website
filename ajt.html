@@ -1,0 +1,89 @@
+<!-- include php -->
+<?php
+
+include 'koneksi.php';
+include 'header.php';
+?>
+<!-- akhir include php -->
+    <!-- Start Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-6 col-12">
+                    <div class="breadcrumbs-content">
+                        <h1 class="page-title">Hitung Data</h1>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12">
+                    <ul class="breadcrumb-nav">
+                        <li><a href="data.php">Data</a></li>
+                        <li>Hitung Data</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Breadcrumbs -->
+
+
+                          <table class="table-sm table-bordered tabel-ispu wow fadeInUp" data-wow-delay="1s">
+                              <thead>
+                                  <tr class="warna-tabel-atas">
+                                      <th scope="col">No.</th>
+                                      <th>Tanggal</th>
+                                      <th>PM10</th>
+                                      <th>SO2</th>
+                                      <th>CO</th>
+                                      <th>O3</th>
+                                      <th>NO2</th>
+                                      <th>Kategori</th> 
+                                      <th>Aksi</th> 
+                                  </tr>
+                              </thead>
+                              <tbody>
+                              <?php
+                                //query ke database SELECT tabel mahasiswa urut berdasarkan id yang paling besar
+                                $sql = mysqli_query($koneksi, "SELECT * FROM hasilhitung ORDER BY id_hasilhitung") or die(mysqli_error($koneksi));
+                                //jika query diatas menghasilkan nilai > 0 maka menjalankan script di bawah if...
+                                if(mysqli_num_rows($sql) > 0){
+                                    //membuat variabel $no untuk menyimpan nomor urut
+                                    $no = 1;
+                                    //melakukan perulangan while dengan dari dari query $sql
+                                    while($data = mysqli_fetch_assoc($sql)){
+                                        //menampilkan data perulangan
+                                        echo '
+                                        <tr>
+                                            <td>'.$no.'</td>
+                                            <td>'.$data['tanggal'].'</td>
+                                            <td>'.$data['pm10'].'</td>
+                                            <td>'.$data['so2'].'</td>
+                                            <td>'.$data['co'].'</td>
+                                            <td>'.$data['o3'].'</td>
+                                            <td>'.$data['no2'].'</td>
+                                            <td>'.$data['kategori'].'</td>
+                                            <td>
+                                                <a href="index.php?page=edit_mhs&Nim='.$data['id_hasilhitung'].'" class="btn btn-secondary btn-sm">Edit</a>
+                                                <a href="delete.php?Nim='.$data['id_hasilhitung'].'" class="btn btn-danger btn-sm" onclick="return confirm(\'Yakin ingin menghapus data ini?\')">Delete</a>
+                                            </td>
+                                        </tr>
+                                        ';
+                                        $no++;
+                                    }
+                                //jika query menghasilkan nilai 0
+                                }else{
+                                    echo '
+                                    <tr>
+                                        <td colspan="6">Tidak ada data.</td>
+                                    </tr>
+                                    ';
+                                }
+                                ?>
+                              </tbody>
+                          </table>
+
+<!-- footer -->
+<?php include 'footer.php'; ?>
+<!-- akhir footer -->
+</body>
+
+</html>
